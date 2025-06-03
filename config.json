@@ -1,0 +1,18 @@
+{
+    "video_path_file": "./paths.txt",
+    "time_file": "./time.json",
+    "memory_file": "./memory.json",
+    "display": {
+        "width": 800,
+        "height": 600
+    },
+    "keys": {
+        "annotate_start": "q",
+        "annotate_end": "e",
+        "next_frame": "d",
+        "pre_frame": "a",
+        "next_video": "c",
+        "pre_video": "z"
+    },
+    "clipped_directory": "./clipped_videos"
+}

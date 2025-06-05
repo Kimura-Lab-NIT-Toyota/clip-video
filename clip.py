@@ -2,6 +2,7 @@ import ffmpeg
 import json
 import cv2
 import os
+import tqdm
 
 CONFIG_FILE = "./config.json"
 config = {}
@@ -23,7 +24,7 @@ for path in list(coretimes.keys()):
 
 if(not os.path.exists(config["clipped_directory"])):
     os.mkdir(config["clipped_directory"])
-for path in list(coretimes.keys()):
+for path in tqdm.tqdm(list(coretimes.keys())):
     # 改行文字を消去
     path = path.replace("\n", "").replace("\r", "")
     if(path in skip_path): continue

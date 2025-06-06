@@ -34,12 +34,16 @@ for path in tqdm.tqdm(list(coretimes.keys())):
     dir_path = f"{config['clipped_directory']}/{path.split('/')[-2]}"
     if (not os.path.isdir(dir_path)):
           os.mkdir(dir_path)
+    output_path = f"{dir_path}/{path.split('/')[-1]}"
+    if(os.path.isfile(output_path)):
+        print(f"Skip {output_path}")
+        continue    
     # フレームレートと始終フレームから開始時間と動画長さを計算
     stream = ffmpeg.input(
         path,
         ss=coretimes[path]["start"]/cap.get(cv2.CAP_PROP_FPS),
         t =(coretimes[path]["end"] - coretimes[path]["start"]) / cap.get(cv2.CAP_PROP_FPS),
-    ).output(f"{dir_path}/{path.split('/')[-1]}")
+    ).output(output_path)
     # 保存
     ffmpeg.run(stream, quiet=True)
 

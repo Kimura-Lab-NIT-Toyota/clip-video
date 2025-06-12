@@ -3,3 +3,5 @@
 /home/user/videos/500010-あいさつ/あいさつ (22).mp4
 ./videos/500050-新しい/新しい (12).mp4
 /home/user/videos/500050-新しい/新しい (16).mp4
+./videos/500160-色/*.mp4
+/home/user/videos/**/*.avi

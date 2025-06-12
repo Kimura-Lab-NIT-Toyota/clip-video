@@ -18,9 +18,17 @@
     - [paths_example.txt](/paths_example.txt)に記述例
     - 絶対パス相対パスどちらも可能
     - 空行は入れないこと
-    - `*/<動画の分類名>/<動画名>`のように記述すること
-      - *は任意のディレクトリ構成
+    - ワイルドカード使用可
+      - 内部的にはglobモジュールを使用
+      - `*`で任意の文字列
+        - [paths_example.txt](/paths_example.txt)の6行目では、`./videos/500160-色/`内にある`.mp4`拡張子の動画ファイルを全選択
+      - `**`で任意のディレクトリ構成
+        - [paths_example.txt](/paths_example.txt)の7行目では、`/home/user/videos/`内にある、サブディレクトリ含めた`.avi`拡張子の動画ファイルを全選択
+      - 参考: [「Pythonで条件を満たすパスの一覧を再帰的に取得するglobの使い方」](https://note.nkmk.me/python-glob-usage/)
+    - ファイル構成は`**/<動画の分類名>/<動画名>`にすること
+      - **は任意のディレクトリ構成
       - 出力時のディレクトリ構成に使用
+    - 対応拡張子はmp4とaviの2種類
 2. [annotate.py](/annotate.py)を実行し、アノテーションを行う
     - `paths.txt`から動画を読み込む
     - 操作法

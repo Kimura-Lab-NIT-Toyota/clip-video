@@ -1,8 +1,9 @@
 import cv2
 import sys
-from natsort import natsorted
 import json
 import os
+from natsort import natsorted
+from glob import glob
 
 CONFIG_FILE = "./config.json"
 config = {}
@@ -19,9 +20,13 @@ MEMORY_FILE = config["memory_file"]
 # 動画ファイルパスの取得
 mp4list = []
 with open(VIDEO_PATH_FILE, "r") as f:
-    mp4list = f.readlines()
-for idx in range(len(mp4list)):
-    mp4list[idx] = mp4list[idx].replace("\n", "")
+    lines = f.readlines()
+    for line in lines:
+        mp4list += (glob(line.replace("\n", ""), recursive=True))
+    mp4list = natsorted(mp4list)
+for path in mp4list:
+    if(os.path.splitext(path)[1].lower() not in [".mp4", ".avi"]):
+        raise Exception(f"{path} is not video!")
 
 # スタートのmp4ファイル番号を読み込み、なければ新規生成
 video_idx = 0

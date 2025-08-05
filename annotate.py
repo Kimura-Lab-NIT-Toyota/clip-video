@@ -89,7 +89,8 @@ def putText_japanese(img, text, point, size, color, thickness):
 # nフレーム増減させる
 def forwardFrame(n):
     # cap.read実行時に自動で1進むため、フレーム数を-1している
-    cap.set(cv2.CAP_PROP_POS_FRAMES, (cap.get(cv2.CAP_PROP_POS_FRAMES)+n-1))%(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    next_frame = (cap.get(cv2.CAP_PROP_POS_FRAMES)+cap.get(cv2.CAP_PROP_FRAME_COUNT)+n-1)%(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    cap.set(cv2.CAP_PROP_POS_FRAMES, next_frame)
 
 pre_idx = video_idx
 while(cap.isOpened()):

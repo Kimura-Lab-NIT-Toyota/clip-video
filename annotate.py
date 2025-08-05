@@ -25,7 +25,7 @@ with open(VIDEO_PATH_FILE, "r") as f:
     lines = f.readlines()
     # configのroot_dirをカレントディレクトリにした相対パスを取得
     for line in lines:
-        mp4list += (glob(line.replace("\n", ""), recursive=True, root_dir=ROOT_DIR))
+        mp4list += [path.replace("\\", "/") for path in (glob(line.replace("\n", ""), recursive=True, root_dir=ROOT_DIR))]
     # 相対パスを絶対パスに直す
     mp4list = natsorted([os.path.join(ROOT_DIR, path) for path in mp4list])
 for path in mp4list:
@@ -105,7 +105,7 @@ while(cap.isOpened()):
         cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
         continue
     # 絶対パスを相対パスに直す
-    path_rel = str(Path(mp4list[video_idx]).relative_to(ROOT_DIR))
+    path_rel = str(Path(mp4list[video_idx]).relative_to(ROOT_DIR)).replace("\\", "/")
     # コアタイム辞書の初期化
     if(path_rel not in times):
         times[path_rel] = {"start": -1, "end": -1}

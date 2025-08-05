@@ -16,15 +16,21 @@
 ## Usage
 1. `paths.txt`に、アノテーション対象の動画パスを改行区切りで列挙
     - [paths_example.txt](/paths_example.txt)に記述例
-    - 絶対パス相対パスどちらも可能
+    - 絶対パスのみ使用可能
     - 空行は入れないこと
     - ワイルドカード使用可
       - 内部的にはglobモジュールを使用
       - `*`で任意の文字列
-        - [paths_example.txt](/paths_example.txt)の6行目では、`./videos/500160-色/`内にある`.mp4`拡張子の動画ファイルを全選択
+        - [paths_example.txt](/paths_example.txt)の3行目では、`/home/user/videos/500160-色/`内にある`.mp4`拡張子の動画ファイルを全選択
       - `**`で任意のディレクトリ構成
-        - [paths_example.txt](/paths_example.txt)の7行目では、`/home/user/videos/`内にある、サブディレクトリ含めた`.avi`拡張子の動画ファイルを全選択
+        - [paths_example.txt](/paths_example.txt)の4行目では、`/home/user/videos/`内にある、サブディレクトリ含めた`.avi`拡張子の動画ファイルを全選択
       - 参考: [「Pythonで条件を満たすパスの一覧を再帰的に取得するglobの使い方」](https://note.nkmk.me/python-glob-usage/)
+    - [config.json](/config.json)の`root_dir`でルートディレクトリを変更可能
+      - デフォルト値はルート直下（`/`）
+      - 複数の環境で出力パスを統一したいときに変更してください。
+      - [paths_example.txt](/paths_example.txt)の例
+        - `root_dir`に`/home/user/videos/`を設定することで、4行目を`**/*.avi`のようにルート構成に関わらず統一可能
+        - アノテーションデータの動画ファイルパスにも反映される
     - ファイル構成は`**/<動画の分類名>/<動画名>`にすること
       - **は任意のディレクトリ構成
       - 出力時のディレクトリ構成に使用
@@ -44,5 +50,5 @@
     - クリップされた動画は`clipped_videos`ディレクトリに配置
     - アノテーション情報が不正な値である場合や、出力先に同名ファイルがある場合には処理を飛ばす
 
-ファイル名やキー設定などは`config.json`から変更できます。
+ファイル名やキー設定などは[config.json](/config.json)から変更できます。
 

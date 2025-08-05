@@ -3,6 +3,7 @@ import sys
 import json
 import os
 from natsort import natsorted
+from pathlib import Path
 from glob import glob
 
 CONFIG_FILE = "./config.json"
@@ -16,14 +17,17 @@ else: raise Exception(f"not found {CONFIG_FILE}")
 VIDEO_PATH_FILE = config["video_path_file"]
 TIME_FILE = config["time_file"]
 MEMORY_FILE = config["memory_file"]
+ROOT_DIR = config["root_dir"]
 
 # 動画ファイルパスの取得
 mp4list = []
 with open(VIDEO_PATH_FILE, "r") as f:
     lines = f.readlines()
+    # configのroot_dirをカレントディレクトリにした相対パスを取得
     for line in lines:
-        mp4list += (glob(line.replace("\n", ""), recursive=True))
-    mp4list = natsorted(mp4list)
+        mp4list += (glob(line.replace("\n", ""), recursive=True, root_dir=ROOT_DIR))
+    # 相対パスを絶対パスに直す
+    mp4list = natsorted([os.path.join(ROOT_DIR, path) for path in mp4list])
 for path in mp4list:
     if(os.path.splitext(path)[1].lower() not in [".mp4", ".avi"]):
         raise Exception(f"{path} is not video!")
@@ -99,16 +103,18 @@ while(cap.isOpened()):
     if(not ret):
         cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
         continue
+    # 絶対パスを相対パスに直す
+    path_rel = str(Path(mp4list[video_idx]).relative_to(ROOT_DIR))
     # コアタイム辞書の初期化
-    if(mp4list[video_idx] not in times):
-        times[mp4list[video_idx]] = {"start": -1, "end": -1}
+    if(path_rel not in times):
+        times[path_rel] = {"start": -1, "end": -1}
     frame = cv2.resize(frame, (display_width, display_height), interpolation=cv2.INTER_LINEAR)
-    frame = putText_japanese(frame, mp4list[video_idx].split("/")[-2] + "\n" + mp4list[video_idx].split("/")[-1], (100, 400), size=48, color=(167,127,32), thickness=2)
+    frame = putText_japanese(frame, path_rel.split("/")[-2] + "\n" + path_rel.split("/")[-1], (100, 400), size=48, color=(167,127,32), thickness=2)
     frame = putText_japanese(frame, str(cap.get(cv2.CAP_PROP_POS_FRAMES)), (300,500), size=64, color=(167,127,32), thickness=2)
-    frame = putText_japanese(frame, f"start={times[mp4list[video_idx]]['start']}", (600, 100), size=32, color=(255,0,0), thickness=2)
-    frame = putText_japanese(frame, f"end={times[mp4list[video_idx]]['end']}", (600, 150), size=32, color=(255,0,0), thickness=2)
+    frame = putText_japanese(frame, f"start={times[path_rel]['start']}", (600, 100), size=32, color=(255,0,0), thickness=2)
+    frame = putText_japanese(frame, f"end={times[path_rel]['end']}", (600, 150), size=32, color=(255,0,0), thickness=2)
     # 現在フレームがコアであるなら表示
-    if(times[mp4list[video_idx]]["start"] <= cap.get(cv2.CAP_PROP_POS_FRAMES) and cap.get(cv2.CAP_PROP_POS_FRAMES) <= times[mp4list[video_idx]]["end"]):
+    if(times[path_rel]["start"] <= cap.get(cv2.CAP_PROP_POS_FRAMES) and cap.get(cv2.CAP_PROP_POS_FRAMES) <= times[path_rel]["end"]):
         frame = putText_japanese(frame, "CORE", (500,0), size=64, color=(0,0,255), thickness=2)
     cv2.imshow('Video', frame)
     isExit = False
@@ -117,12 +123,12 @@ while(cap.isOpened()):
         key = cv2.waitKey(25)
         # 始点フレームのアノテーション
         if(key == ord(config["keys"]["annotate_start"])):
-            times[mp4list[video_idx]]["start"] = cap.get(cv2.CAP_PROP_POS_FRAMES)
+            times[path_rel]["start"] = cap.get(cv2.CAP_PROP_POS_FRAMES)
             forwardFrame(0)
             break
         # 終点フレームのアノテーション
         if(key == ord(config["keys"]["annotate_end"])):
-            times[mp4list[video_idx]]["end"] = cap.get(cv2.CAP_PROP_POS_FRAMES)
+            times[path_rel]["end"] = cap.get(cv2.CAP_PROP_POS_FRAMES)
             forwardFrame(0)
             break
         # 次フレーム

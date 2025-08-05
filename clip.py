@@ -16,9 +16,12 @@ skip_path = set()
 # コアとなる時間を記したjsonを読み込む
 with open(config["time_file"], "r") as f:
     coretimes = json.load(f)
+# 相対パスを絶対パスに直す
+for path in list(coretimes.keys()):
+    coretimes[os.path.join(config["root_dir"], path)] = coretimes.pop(path)
 # 未記入のパスがないかの確認
 for path in list(coretimes.keys()):
-    if(coretimes[path]["start"] == -1 or coretimes[path]["end"] == -1 or coretimes[path]["start"] > coretimes[path]["end"]):
+    if(not os.path.isfile(path) or coretimes[path]["start"] == -1 or coretimes[path]["end"] == -1 or coretimes[path]["start"] > coretimes[path]["end"]):
         print(f"Skip {path}")
         skip_path.add(path)
 

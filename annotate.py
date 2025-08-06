@@ -110,10 +110,10 @@ while(cap.isOpened()):
     if(path_rel not in times):
         times[path_rel] = {"start": -1, "end": -1}
     frame = cv2.resize(frame, (display_width, display_height), interpolation=cv2.INTER_LINEAR)
-    frame = putText_japanese(frame, path_rel.split("/")[-2] + "\n" + path_rel.split("/")[-1], (100, 400), size=48, color=(167,127,32), thickness=2)
-    frame = putText_japanese(frame, str(cap.get(cv2.CAP_PROP_POS_FRAMES)), (300,500), size=64, color=(167,127,32), thickness=2)
-    frame = putText_japanese(frame, f"start={times[path_rel]['start']}", (600, 100), size=32, color=(255,0,0), thickness=2)
-    frame = putText_japanese(frame, f"end={times[path_rel]['end']}", (600, 150), size=32, color=(255,0,0), thickness=2)
+    frame = putText_japanese(frame, path_rel.split("/")[-2] + "\n" + path_rel.split("/")[-1], (100, display_height-200), size=48, color=(167,127,32), thickness=2)
+    frame = putText_japanese(frame, str(int(cap.get(cv2.CAP_PROP_POS_FRAMES))-1), (display_width-250, display_height-150), size=100, color=(127,127,256), thickness=2)
+    frame = putText_japanese(frame, f"start={times[path_rel]['start']}", (display_width-250, 100), size=48, color=(255,63,255), thickness=2)
+    frame = putText_japanese(frame, f"end={times[path_rel]['end']}", (display_width-250, 175), size=48, color=(255,63,255), thickness=2)
     # 現在フレームがコアであるなら表示
     if(times[path_rel]["start"] <= cap.get(cv2.CAP_PROP_POS_FRAMES) and cap.get(cv2.CAP_PROP_POS_FRAMES) <= times[path_rel]["end"]):
         frame = putText_japanese(frame, "CORE", (500,0), size=64, color=(0,0,255), thickness=2)
@@ -124,12 +124,12 @@ while(cap.isOpened()):
         key = cv2.waitKey(25)
         # 始点フレームのアノテーション
         if(key == ord(config["keys"]["annotate_start"])):
-            times[path_rel]["start"] = cap.get(cv2.CAP_PROP_POS_FRAMES)
+            times[path_rel]["start"] = int(cap.get(cv2.CAP_PROP_POS_FRAMES))-1
             forwardFrame(0)
             break
         # 終点フレームのアノテーション
         if(key == ord(config["keys"]["annotate_end"])):
-            times[path_rel]["end"] = cap.get(cv2.CAP_PROP_POS_FRAMES)
+            times[path_rel]["end"] = int(cap.get(cv2.CAP_PROP_POS_FRAMES))-1
             forwardFrame(0)
             break
         # 次フレーム

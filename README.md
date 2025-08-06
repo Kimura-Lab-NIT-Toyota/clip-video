@@ -50,5 +50,12 @@
     - クリップされた動画は`clipped_videos`ディレクトリに配置
     - アノテーション情報が不正な値である場合や、出力先に同名ファイルがある場合には処理を飛ばす
 
-ファイル名やキー設定などは[config.json](/config.json)から変更できます。
+- ファイル名やキー設定などは[config.json](/config.json)から変更できます
+
+## Note
+- 動画サイズが大きくなると、[annotate.py](/annotate.py)の動作が重くなる可能性があります
+- この場合には、以下を試してください。
+  - [annotate_preload.py](/annotate_preload.py)を代替に使用する
+    - バックグランドで前後の動画ファイルを先に読み込みます
+    - 先読み込みするファイル数は[config.json](/config.json)の`preload`から変更可能
 

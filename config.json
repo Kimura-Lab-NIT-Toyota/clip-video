@@ -4,8 +4,12 @@
     "memory_file": "./memory.json",
     "root_dir": "/",
     "display": {
-        "width": 800,
-        "height": 600
+        "width": 1280,
+        "height": 720
+    },
+    "preload": {
+        "ahead": 3,
+        "behind": 3
     },
     "keys": {
         "annotate_start": "q",

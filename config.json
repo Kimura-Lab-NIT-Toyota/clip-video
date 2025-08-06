@@ -2,7 +2,7 @@
     "video_path_file": "./paths.txt",
     "time_file": "./time.json",
     "memory_file": "./memory.json",
-    "root_dir": "/",
+    "root_dir": "./new/",
     "display": {
         "width": 1280,
         "height": 720

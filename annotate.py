@@ -114,6 +114,7 @@ while(cap.isOpened()):
     frame = putText_japanese(frame, str(int(cap.get(cv2.CAP_PROP_POS_FRAMES))-1), (display_width-250, display_height-150), size=100, color=(127,127,256), thickness=2)
     frame = putText_japanese(frame, f"start={times[path_rel]['start']}", (display_width-250, 100), size=48, color=(255,63,255), thickness=2)
     frame = putText_japanese(frame, f"end={times[path_rel]['end']}", (display_width-250, 175), size=48, color=(255,63,255), thickness=2)
+    frame = putText_japanese(frame, f"{video_idx}/{len(mp4list)}", (50, 50), size=32, color=(0,0,0), thickness=2)
     # 現在フレームがコアであるなら表示
     if(times[path_rel]["start"] <= cap.get(cv2.CAP_PROP_POS_FRAMES) and cap.get(cv2.CAP_PROP_POS_FRAMES) <= times[path_rel]["end"]):
         frame = putText_japanese(frame, "CORE", (500,0), size=64, color=(0,0,255), thickness=2)
